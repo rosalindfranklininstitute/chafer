@@ -40,7 +40,6 @@ def upscale_along_XY(data3D, factor=2 , bool_intermediate=True):
     data_upscaled= rescale(data_to_scale,(1,factor,factor) ).astype(data3D.dtype)
     return data_upscaled
 
-
 #####
 # Unet predictions of charge centers
 # Make sure slices in images are not too big to feed the Unet with
@@ -57,10 +56,13 @@ class cls_predict_charge_centers_with_unet():
     #def __init__(self, model_fn = 'trainedLipid50-50_Unet256_2.pkl' ):
     def __init__(self, model_fn ):
         # Parameter: model_fn - filename of fastai model in pkl format, that can be opened using fastai load_learner
-        #If this code is in a package, this line will help locate the file
-        model_fn_full = os.path.join(os.path.dirname(__file__),model_fn)
+        # Make sure filename is ok
 
-        self.model = load_learner('', model_fn_full)
+        #If this code is in a package, this line will help locate the file
+        #model_fn_full = os.path.join(os.path.dirname(__file__),model_fn)
+        #self.model = load_learner('', model_fn_full)
+
+        self.model = load_learner('', model_fn)
 
         # Remove the restriction on the model prediction size
         self.model.data.single_ds.tfmargs['size'] = None
@@ -163,7 +165,7 @@ from scipy.optimize import curve_fit
 class cls_charge_artifact_suppression_filter():
     # Class to deal with filtering of charge artifacts
     # It requires charging centres to be segmented
-    
+
     PASS_DIR_DOWN = False
     PASS_DIR_UP = True
 
