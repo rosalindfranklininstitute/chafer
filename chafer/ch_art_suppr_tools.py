@@ -21,13 +21,15 @@ limitations under the License.
 import numpy as np
 
 from skimage.transform import downscale_local_mean, rescale
-# Downscale 3D data
+# Downscale 3D data along X and Y axis, but not Z, preserving number of slices along Z
 def downscale_along_XY(data3D, factor=2):
     data_downscaled_xy = downscale_local_mean(data3D,factors=(1,factor,factor)).astype(data3D.dtype)
     return data_downscaled_xy
 
 def upscale_along_XY(data3D, factor=2 , bool_intermediate=True):
-    #rescale does not work well with uint8 on binary label data
+    #Upscale data along X and Y axis but not along Z, preserving number of slices along Z
+
+    # Rescale does not work well with uint8 on binary label data
     # To ensure proper rescale make sure data in in bool format, not uint8
     data_to_scale = None
     if bool_intermediate:
@@ -47,21 +49,14 @@ from fastai.vision import *
 from fastai.callbacks.hooks import *
 from fastai.utils.mem import *
 from skimage import img_as_ubyte, img_as_float
-import os
-
-
+import os, shutil
 
 class cls_predict_charge_centers_with_unet():
-    
-    def __init__(self, model_fn = 'trainedLipid50-50_Unet256_2.pkl' ):
-        # # Create a metric for assessing performance
-        # metrics=[partial(dice, iou=True)]
+    #Class to help doing predictions using fastai unet
 
-        # # weight decay 
-        # wd=1e-2
-
-        # self.model= self.create_model_from_zip( model_fn )
-
+    #def __init__(self, model_fn = 'trainedLipid50-50_Unet256_2.pkl' ):
+    def __init__(self, model_fn ):
+        # Parameter: model_fn - filename of fastai model in pkl format, that can be opened using fastai load_learner
         #If this code is in a package, this line will help locate the file
         model_fn_full = os.path.join(os.path.dirname(__file__),model_fn)
 
@@ -71,6 +66,9 @@ class cls_predict_charge_centers_with_unet():
         self.model.data.single_ds.tfmargs['size'] = None
 
     def create_model_from_zip(self, weights_fn):
+        #Loads model from zip file.
+        #This code is untested
+
         from zipfile import ZipFile
         from pathlib import PosixPath
 
@@ -128,9 +126,6 @@ class cls_predict_charge_centers_with_unet():
         else:
             print("Failed to load model file.")
 
-
-
-
     def predict_charge_centers_with_unet_2d(self,data2d):
         # unet was trained for images, so convert to image
         data = img_as_float(data2d)
@@ -166,7 +161,9 @@ from scipy.ndimage import binary_dilation
 from scipy.optimize import curve_fit
 
 class cls_charge_artifact_suppression_filter():
-
+    # Class to deal with filtering of charge artifacts
+    # It requires charging centres to be segmented
+    
     PASS_DIR_DOWN = False
     PASS_DIR_UP = True
 
@@ -322,6 +319,7 @@ class cls_charge_artifact_suppression_filter():
         return data_filtered.astype(data_2d.dtype), opts
 
     def charge_artifact_suppression_filter_3d(self, data3D, charge_center_labels_3d, dilate_iter=1):
+        #Filter whole 3D volume
 
         data_all_filt = np.zeros_like(data3D)
         optsz = []
