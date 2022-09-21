@@ -46,11 +46,12 @@ setup(
     install_requires=[
         'numpy',
         'scipy',
-        'fastai == 1.0.61',
         'scikit-image',
         'scipy'
     ],
-    package_data={'chafer': ['*.pkl']},
-    include_package_data=True,
+    extra_requires=[
+        'fastai = 1.0.61'
+    ],
+    #include_package_data=True,
 
 )
