@@ -127,3 +127,8 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Don't upload models for now
+*.pkl
+scripts/Serial-FIB-ASV crop.tif
+scripts/resizing.ipynb
