@@ -1,12 +1,8 @@
 # chafer
-CHArge artiFact SupprEssion Tool for Scanning ElectRon Microscope Images
+**CHA**rge arti**F**act suppr**E**ssion tool for scanning elect**R**on microscope images
 
 Contains:
 
 - functions for upscaling 3D data along X and Y axis, and preserving along Z axis
 - unet (fastai) predictor - requires model file
 - charge artefact suppression filter for 2D and 3D SEM images - requires respective charge centres to be segmented in a separate file
-
-## TODO:
-- Add package to PyPI
-- Gradually remove dependencies on fastai, and create a new charge prediction engine with another unet implementation
