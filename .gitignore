@@ -132,3 +132,4 @@ dmypy.json
 *.pkl
 scripts/Serial-FIB-ASV crop.tif
 scripts/resizing.ipynb
+.pypirc
