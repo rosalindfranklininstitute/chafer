@@ -22,9 +22,9 @@ this_directory = Path(__file__).parent
 long_description = (this_directory / "README.md").read_text()
 
 setup(
-    version = '0.2',
+    version = '0.3',
     name = 'chafer',
-    description = 'CHArge artiFact SupprEssion Tool for Scanning ElectRon Microscope Images',
+    description = 'CHArge artiFact supprEssion tool for scanning electRon microscope images',
     long_description=long_description,
     long_description_content_type='text/markdown',
     url = 'https://github.com/rosalindfranklininstitute/chafer',
