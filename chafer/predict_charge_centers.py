@@ -117,22 +117,23 @@ try:
 
             return pred_ubyte
 
+        def predict_charge_centers_with_unet_3d(self, data_to_pred_3d):
+            data_predicted = np.zeros(data_to_pred_3d.shape ,dtype=np.uint8)
+
+
+            for iz in range(data_to_pred_3d.shape[0]):
+                print(f'iz: {iz}')
+
+                dslice = data_to_pred_3d[iz,:,:]
+
+                dpred =  self.predict_charge_centers_with_unet_2d(dslice)
+
+                data_predicted[iz,:,:]= dpred
+            
+            return data_predicted
+
 except ImportError:
     print("Failed to import python modules needed for predicting charge centres. This functionality will be unavailable.")
 
 
-def predict_charge_centers_with_unet_3d(data_to_pred_3d):
-    data_predicted = np.zeros(data_to_pred_3d.shape ,dtype=np.uint8)
 
-    my_pred_cls = cls_predict_charge_centers_with_unet()
-
-    for iz in range(data_to_pred_3d.shape[0]):
-        print(f'iz: {iz}')
-
-        dslice = data_to_pred_3d[iz,:,:]
-
-        dpred =  my_pred_cls.predict_charge_centers_with_unet_2d(dslice)
-
-        data_predicted[iz,:,:]= dpred
-    
-    return data_predicted
